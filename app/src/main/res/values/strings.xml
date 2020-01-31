@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">PB Task</string>
+    <string name="app_autor">Piotr B.</string>
+
+    <string name="action_dark">Dark</string>
+    <string name="action_another">Another</string>
+</resources>
