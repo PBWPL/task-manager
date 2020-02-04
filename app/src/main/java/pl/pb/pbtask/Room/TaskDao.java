@@ -1,5 +1,6 @@
 package pl.pb.pbtask.Room;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -22,12 +23,26 @@ public interface TaskDao {
     @Delete
     void deleteTask(Task task);
 
-    @Query("SELECT * FROM task_table")
-    List<Task> getAllTasks();
+    @Query("DELETE FROM task_table")
+    void deleteTasks();
 
-    @Query("SELECT * FROM task_table WHERE task_id LIKE :id")
-    Task findTaskById(int id);
+    @Query("SELECT * FROM task_table ORDER BY task_difficulty ASC")
+    LiveData<List<Task>> getAllTasksByDifficulty();
+    //MutableLiveData<List<Task>> getAllTasksByDifficulty();
+
+    @Query("SELECT * FROM task_table WHERE task_title LIKE :title")
+    List<Task> findTaskByTitle(String title);
 
     @Query("SELECT * FROM task_table WHERE task_finish LIKE 1")
     List<Task> getAllFinishTasks();
 }
+
+
+/*
+ @Query("DELETE FROM word_table")
+   void deleteAll();
+
+   @Query("SELECT * from word_table ORDER BY word ASC")
+   List<Word> getAlphabetizedWords();
+}
+ */

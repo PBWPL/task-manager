@@ -19,6 +19,8 @@ public class LoadingActivity extends AppCompatActivity {
     TextView app_name, app_autor;
     Animation top_anim, middle_anim, bottom_anim;
 
+    int SLEEP_TIME = 5000;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +59,11 @@ public class LoadingActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             }
-        }, 5000);
+        }, SLEEP_TIME);
 
+    }
+
+    @Override
+    public void onBackPressed() {
     }
 }
