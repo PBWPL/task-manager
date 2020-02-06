@@ -3,39 +3,45 @@ package pl.pb.pbtask;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.List;
-
+import maes.tech.intentanim.CustomIntent;
 import pl.pb.pbtask.Room.Task;
 import pl.pb.pbtask.Room.TaskViewModel;
 
+/*
+ * Created by AndroidStudio.
+ * User: piotrbec
+ * Date: 2020-01-25
+ */
+
 public class DashboardActivity extends AppCompatActivity {
-    public static final int NEW_TASK_ACTIVITY_REQUEST_CODE = 1;
     private static final String TAG = "DashboardActivity";
-    TaskAdapter taskAdapter;
+
+    public static final int ADD_NOTE_REQUEST = 1;
+    public static final int EDIT_NOTE_REQUEST = 2;
+
+    private TaskAdapter taskAdapter;
+    private TaskViewModel taskViewModel;
+
     RecyclerView recyclerView;
     SharedPreferences sharedPreferences;
     SwipeRefreshLayout swipeRefreshLayout;
-    TaskViewModel taskViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,90 +50,167 @@ public class DashboardActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        taskAdapter = new TaskAdapter(this);
-        recyclerView.setAdapter(taskAdapter);
+        init();
+
+        sharedPreferences = getSharedPreferences("settings", MODE_PRIVATE);
+        try {
+            AppCompatDelegate.setDefaultNightMode(getDark());
+        } catch (NullPointerException e) {
+            setDark(false);
+            AppCompatDelegate.setDefaultNightMode(getDark());
+        }
+
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setHasFixedSize(true);
+
+        final TaskAdapter taskAdapter = new TaskAdapter();
+        recyclerView.setAdapter(taskAdapter);
 
         taskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
+        taskViewModel.getAllTasksByDifficulty().observe(this, taskAdapter::setTasks);
 
-        taskViewModel.getAllTasksByDifficulty().observe(this, tasks -> taskAdapter.setTasks(tasks));
-
-//        getAllTasks();
-//        initRecyclerView();
-//
-//        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
-//        recyclerView.addItemDecoration(dividerItemDecoration);
-
-        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout_2);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-//                tasks.add(new Task("asdasd_x", 1, "12.12.2019", "11:50", true, "day", 2, true));
-//                tasks.add(new Task("asdasd_y", 2, "12.12.2015", "21:50", false, "month", 1, true));
-//                tasks.add(new Task("asdasd_z", 3, "12.12.2012", "10:50", true, "minute", 4, false));
-//                tasks.add(new Task("asdasd_h", 1, "12.12.2011", "01:50", false, "year", 5, false));
-                taskViewModel.insertTask(new Task("wstawka", 9, "11.12.2019", "12:50", true, "minute", 1, true));
-                LiveData<List<Task>> x = taskViewModel.getAllTasksByDifficulty();
-                Log.d(TAG, x.toString());
-
-                taskAdapter.notifyDataSetChanged();
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(() -> swipeRefreshLayout.setRefreshing(false));
 
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                insertTask();
-//                insertTask();
-//                insertTask();
-//                insertTask();
-//                insertTask();
-//                getAllTasks();
-
-                Intent intent = new Intent(DashboardActivity.this, AddTaskActivity.class);
-                startActivityForResult(intent, NEW_TASK_ACTIVITY_REQUEST_CODE);
-
-                Toast toast = new Toast(getApplicationContext());
-                View view = LayoutInflater.from(DashboardActivity.this).inflate(R.layout.toast_layout, null);
-                TextView toastTextView = view.findViewById(R.id.textViewToast);
-                toastTextView.setText("FAB");
-                toast.setView(view);
-                toast.setDuration(Toast.LENGTH_SHORT);
-
-                toast.setGravity(Gravity.END | Gravity.BOTTOM, 32, 179);
-                toast.show();
-            }
+        fab.setOnClickListener(v -> {
+            Intent intent = new Intent(DashboardActivity.this, AddEditTaskActivity.class);
+            startActivityForResult(intent, ADD_NOTE_REQUEST);
+//            Toast toast = new Toast(getApplicationContext());
+//            View view = LayoutInflater.from(DashboardActivity.this).inflate(R.layout.toast_layout, null);
+//            TextView toastTextView = view.findViewById(R.id.textViewToast);
+//            toastTextView.setText("FAB");
+//            toast.setView(view);
+//            toast.setDuration(Toast.LENGTH_SHORT);
+//            toast.setGravity(Gravity.END | Gravity.BOTTOM, 32, 179);
+//            toast.show();
         });
 
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                taskViewModel.deleteTask(taskAdapter.getTaskAt(viewHolder.getAdapterPosition()));
+                Toast.makeText(DashboardActivity.this, "delete" + viewHolder.getAdapterPosition(), Toast.LENGTH_SHORT).show();
+            }
+        }).attachToRecyclerView(recyclerView);
+
+        taskAdapter.setOnItemClickListener(task -> {
+            Intent intent = new Intent(DashboardActivity.this, AddEditTaskActivity.class);
+            intent.putExtra(AddEditTaskActivity.EXTRA_ID, task.getId());
+            intent.putExtra(AddEditTaskActivity.EXTRA_TITLE, task.getTitle());
+            intent.putExtra(AddEditTaskActivity.EXTRA_DIFFICULTY, task.getDifficulty());
+            intent.putExtra(AddEditTaskActivity.EXTRA_DATE, task.getDate());
+            intent.putExtra(AddEditTaskActivity.EXTRA_TIME, task.getTime());
+            intent.putExtra(AddEditTaskActivity.EXTRA_REPEAT, task.isRepeat());
+            intent.putExtra(AddEditTaskActivity.EXTRA_REPEAT_TYPE, task.getRepeat_type());
+            intent.putExtra(AddEditTaskActivity.EXTRA_REPEAT_NUMBER, task.getRepeat_number());
+            intent.putExtra(AddEditTaskActivity.EXTRA_FINISH, task.isFinish());
+            CustomIntent.customType(this, "fadein-to-fadeout");
+            startActivityForResult(intent, EDIT_NOTE_REQUEST);
+
+        });
+
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        CustomIntent.customType(this, "fadein-to-fadeout");
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == NEW_TASK_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-            Task test = new Task(data.getStringExtra(AddTaskActivity.EXTRA_REPLY), 1, "11.12.2019", "12:50", true, "minute", 1, true);
-            taskViewModel.insertTask(test);
+        if (requestCode == ADD_NOTE_REQUEST && resultCode == RESULT_OK) {
+            String task_id = data.getStringExtra(AddEditTaskActivity.EXTRA_ID);
+            String task_title = data.getStringExtra(AddEditTaskActivity.EXTRA_TITLE);
+            int task_difficulty = Integer.parseInt(data.getStringExtra(AddEditTaskActivity.EXTRA_DIFFICULTY));
+            String task_date = data.getStringExtra(AddEditTaskActivity.EXTRA_DATE);
+            String task_time = data.getStringExtra(AddEditTaskActivity.EXTRA_TIME);
+            boolean task_repeat = Boolean.parseBoolean(data.getStringExtra(AddEditTaskActivity.EXTRA_REPEAT));
+            String task_repeat_type = data.getStringExtra(AddEditTaskActivity.EXTRA_REPEAT_TYPE);
+            int task_repeat_number = Integer.parseInt(data.getStringExtra(AddEditTaskActivity.EXTRA_REPEAT_NUMBER));
+            boolean task_finish = Boolean.parseBoolean(data.getStringExtra(AddEditTaskActivity.EXTRA_FINISH));
+            Task task = new Task(task_title, task_difficulty, task_date, task_time, task_repeat, task_repeat_type, task_repeat_number, task_finish);
+            taskViewModel.insertTask(task);
+            Toast.makeText(getApplicationContext(), "Task added", Toast.LENGTH_SHORT).show();
+        } else if (requestCode == EDIT_NOTE_REQUEST && resultCode == RESULT_OK) {
+            int task_id = data.getIntExtra(AddEditTaskActivity.EXTRA_ID, -1);
+            if (task_id != -1) {
+                Toast.makeText(getApplicationContext(), "Task can`t be updated", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            String task_title = data.getStringExtra(AddEditTaskActivity.EXTRA_TITLE);
+            int task_difficulty = Integer.parseInt(data.getStringExtra(AddEditTaskActivity.EXTRA_DIFFICULTY));
+            String task_date = data.getStringExtra(AddEditTaskActivity.EXTRA_DATE);
+            String task_time = data.getStringExtra(AddEditTaskActivity.EXTRA_TIME);
+            boolean task_repeat = Boolean.parseBoolean(data.getStringExtra(AddEditTaskActivity.EXTRA_REPEAT));
+            String task_repeat_type = data.getStringExtra(AddEditTaskActivity.EXTRA_REPEAT_TYPE);
+            int task_repeat_number = Integer.parseInt(data.getStringExtra(AddEditTaskActivity.EXTRA_REPEAT_NUMBER));
+            boolean task_finish = Boolean.parseBoolean(data.getStringExtra(AddEditTaskActivity.EXTRA_FINISH));
+            Task task = new Task(task_title, task_difficulty, task_date, task_time, task_repeat, task_repeat_type, task_repeat_number, task_finish);
+            task.setId(task_id);
+            taskViewModel.updateTask(task);
+            Toast.makeText(getApplicationContext(), "Task updated", Toast.LENGTH_SHORT).show();
+
         } else {
-            Toast.makeText(getApplicationContext(), "OK", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Task not saved", Toast.LENGTH_SHORT).show();
+
         }
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        if (isDark()) {
+            menu.getItem(0).setChecked(true);
+        }
         return true;
+    }
+
+    public int getDark() {
+        return isDark() ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO;
+    }
+
+    public boolean isDark() {
+        return this.sharedPreferences.getInt("dark", AppCompatDelegate.MODE_NIGHT_NO) == 2;
+    }
+
+    public void setDark(boolean dark) {
+        if (dark) {
+            this.sharedPreferences.edit().putInt("dark", AppCompatDelegate.MODE_NIGHT_YES).apply();
+        } else {
+            this.sharedPreferences.edit().putInt("dark", AppCompatDelegate.MODE_NIGHT_NO).apply();
+        }
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_dark:
-                Log.d(TAG, "dark");
+                if (item.isChecked() && isDark()) {
+                    item.setChecked(false);
+                    setDark(false);
+                    AppCompatDelegate.setDefaultNightMode(getDark());
+                } else {
+                    item.setChecked(true);
+                    setDark(true);
+                    AppCompatDelegate.setDefaultNightMode(getDark());
+                }
                 break;
             case R.id.action_grid:
-                Log.d(TAG, "grid");
+                if (item.isChecked()) {
+                    item.setChecked(false);
+                } else {
+                    item.setChecked(true);
+                }
+                break;
+            case R.id.action_about:
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -135,141 +218,10 @@ public class DashboardActivity extends AppCompatActivity {
 
     // ----------
 
-//    private void initData(List<Task> data) {
-//        this.tasks = data;
-//    }
-//
-//    private void initRecyclerView() {
-//        recyclerView = findViewById(R.id.recyclerView);
-//        taskAdapter = new TaskAdapter(tasks);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-//        recyclerView.setAdapter(taskAdapter);
-//    }
-
-//    // ----------
-//
-//    public void insertTask() {
-//        Task task = new Task("asdasd_1", 1, "12.12.2017", "01:50", true, "day", 2, false);
-//        InsertAsyncTask insertAsyncTask = new InsertAsyncTask();
-//        insertAsyncTask.execute(task);
-//        Log.d(TAG, "przeszło" + task.toString());
-//    }
-//
-//    public void insertTasks(View view) {
-//
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                List<Task> tasks = new ArrayList<>();
-//                tasks.add(new Task("asdasd_x", 1, "12.12.2019", "11:50", true, "day", 2, true));
-//                tasks.add(new Task("asdasd_y", 2, "12.12.2015", "21:50", false, "month", 1, true));
-//                tasks.add(new Task("asdasd_z", 3, "12.12.2012", "10:50", true, "minute", 4, false));
-//                tasks.add(new Task("asdasd_h", 1, "12.12.2011", "01:50", false, "year", 5, false));
-//
-//                TaskRoomDatabase.getInstance(getApplicationContext())
-//                        .taskDao()
-//                        .insertTasks(tasks);
-//
-//                Log.d(TAG, "run: tasks has been inserted...");
-//            }
-//        }).start();
-//
-//    }
-//
-//    public void updateTask(View view) {
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                Task task = TaskRoomDatabase.getInstance(getApplicationContext()).taskDao()
-//                        .findTaskById(1);
-//
-//                if (task != null) {
-//                    task.setFinish(true);
-//
-//                    TaskRoomDatabase.getInstance(getApplicationContext())
-//                            .taskDao()
-//                            .updateTask(task);
-//
-//                    Log.d(TAG, "run: task has been updated...");
-//                }
-//            }
-//        }).start();
-//
-//    }
-//
-//    public void deleteTask(View view) {
-//
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                Task task = TaskRoomDatabase.getInstance(getApplicationContext()).taskDao()
-//                        .findTaskById(4);
-//
-//                Log.d(TAG, "run: " + task.toString());
-//
-//                TaskRoomDatabase.getInstance(getApplicationContext()).taskDao()
-//                        .deleteTask(task);
-//
-//                Log.d(TAG, "run: task has been deleted...");
-//
-//            }
-//        }).start();
-//    }
-//
-//    public void getAllTasks() {
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                tasks = TaskRoomDatabase.getInstance(getApplicationContext()).taskDao()
-//                        .getAllTasks();
-//
-//                //initData(tasks);
-//
-//                Log.d("XXX", tasks.toString());
-//            }
-//        }).start();
-//
-//    }
-//
-//    public void findTaskById() {
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                Task task = TaskRoomDatabase.getInstance(getApplicationContext()).taskDao()
-//                        .findTaskById(1);
-//
-//                Log.d(TAG, "run: " + task.toString());
-//            }
-//        });
-//    }
-//
-//    public void findAllFinishTasks(View view) {
-//
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                List<Task> tasks = TaskRoomDatabase.getInstance(getApplicationContext()).taskDao()
-//                        .getAllFinishTasks();
-//
-//                Log.d(TAG, "run: " + tasks.toString());
-//            }
-//        }).start();
-//
-//    }
+    private void init() {
+    }
 
     @Override
     public void onBackPressed() {
-        // block button back on this activity
     }
-
-//    class InsertAsyncTask extends AsyncTask<Task, Void, Void> {
-//
-//        @Override
-//        protected Void doInBackground(Task... tasks) {
-//
-//            TaskRoomDatabase.getInstance(getApplicationContext()).taskDao().insertTask(tasks[0]);
-//            return null;
-//        }
-//    }
-
 }

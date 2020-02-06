@@ -9,13 +9,16 @@ import androidx.room.Update;
 
 import java.util.List;
 
+/*
+ * Created by AndroidStudio.
+ * User: piotrbec
+ * Date: 2020-01-26
+ */
+
 @Dao
 public interface TaskDao {
     @Insert
     void insertTask(Task task);
-
-    @Insert
-    void insertTasks(List<Task> tasks);
 
     @Update
     void updateTask(Task task);
@@ -28,21 +31,10 @@ public interface TaskDao {
 
     @Query("SELECT * FROM task_table ORDER BY task_difficulty ASC")
     LiveData<List<Task>> getAllTasksByDifficulty();
-    //MutableLiveData<List<Task>> getAllTasksByDifficulty();
 
-    @Query("SELECT * FROM task_table WHERE task_title LIKE :title")
-    List<Task> findTaskByTitle(String title);
+    @Query("SELECT * FROM task_table WHERE task_finish=0 ORDER BY task_difficulty ASC")
+    LiveData<List<Task>> getAllTasksByDifficultyWithoutFinishTasks();
 
-    @Query("SELECT * FROM task_table WHERE task_finish LIKE 1")
-    List<Task> getAllFinishTasks();
+    @Query("SELECT * FROM task_table WHERE task_title LIKE (:title_like)")
+    LiveData<List<Task>> findTaskByTitle(String title_like);
 }
-
-
-/*
- @Query("DELETE FROM word_table")
-   void deleteAll();
-
-   @Query("SELECT * from word_table ORDER BY word ASC")
-   List<Word> getAlphabetizedWords();
-}
- */

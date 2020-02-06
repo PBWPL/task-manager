@@ -5,6 +5,12 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+/*
+ * Created by AndroidStudio.
+ * User: piotrbec
+ * Date: 2020-01-26
+ */
+
 @Entity(tableName = "task_table")
 public class Task {
     @PrimaryKey(autoGenerate = true)
@@ -35,10 +41,8 @@ public class Task {
     @ColumnInfo(name = "task_finish")
     private boolean finish;
 
-    // ----------
-
-    public Task(String title, int difficulty, String date, String time,
-                boolean repeat, String repeat_type, int repeat_number, boolean finish) {
+    public Task(String title, int difficulty, String date, String time, boolean repeat,
+                String repeat_type, int repeat_number, boolean finish) {
         this.title = title;
         this.difficulty = difficulty;
         this.date = date;
@@ -52,18 +56,11 @@ public class Task {
     @NonNull
     @Override
     public String toString() {
-        return "\nTask{" + "id='" + id
-                + "', title='" + title
-                + "', difficulty=" + difficulty
-                + "', date=" + date
-                + "', time=" + time
-                + "', repeat=" + repeat
-                + "', repeat_type=" + repeat_type
-                + "', repeat_number=" + repeat_number
+        return "\nTask{" + "id='" + id + "', title='" + title + "', difficulty=" + difficulty
+                + "', date=" + date + "', time=" + time + "', repeat=" + repeat
+                + "', repeat_type=" + repeat_type + "', repeat_number=" + repeat_number
                 + "', finish=" + finish + '}';
     }
-
-    // ----------
 
     public int getId() {
         return id;

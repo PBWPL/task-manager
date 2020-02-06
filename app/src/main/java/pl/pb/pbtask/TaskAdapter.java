@@ -6,63 +6,66 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import pl.pb.pbtask.Room.Task;
+import pl.pb.pbtask.Room.TaskViewModel;
+
+/*
+ * Created by AndroidStudio.
+ * User: piotrbec
+ * Date: 2020-01-30
+ */
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder> {
     private static final String TAG = "RecyclerAdapter";
-    private final LayoutInflater layoutInflater;
-    private List<Task> tasks;
 
-    TaskAdapter(Context context) {
-        layoutInflater = LayoutInflater.from(context);
-    }
+    private List<Task> tasks = new ArrayList<>();
+
+    private OnItemClickListener listener;
 
     @NonNull
     @Override
     public TaskViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = layoutInflater.inflate(R.layout.recyclerview_task, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_task, parent, false);
         return new TaskViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull TaskViewHolder holder, int position) {
-        if (tasks != null) {
-            Task current = tasks.get(position);
-            holder.task_id.setText("id");
-            holder.task_title.setText(current.getTitle());
-        } else {
-            holder.task_id.setText("Empty");
-            holder.task_title.setText("Empty");
-        }
+        Task current = tasks.get(position);
+        holder.task_id.setText(current.getTitle());
+        holder.task_title.setText(current.getTitle());
     }
 
     @Override
     public int getItemCount() {
-        if (tasks != null) {
-            return tasks.size();
-        } else return 0;
+        return tasks.size();
     }
 
-    void setTasks(List<Task> tasks_1) {
-        tasks = tasks_1;
+    void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
         notifyDataSetChanged();
     }
 
+    Task getTaskAt(int position) {
+        return tasks.get(position);
+    }
+
     class TaskViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private final TextView task_id, task_title, task_difficulty, task_date, task_time, task_repeat,
+        private TextView task_id, task_title, task_difficulty, task_date, task_time, task_repeat,
                 task_repeat_type, task_repeat_number, task_finish;
 
         private TaskViewHolder(View itemView) {
             super(itemView);
-
-            task_title = itemView.findViewById(R.id.task_title);
             task_id = itemView.findViewById(R.id.task_id);
+            task_title = itemView.findViewById(R.id.task_title);
             task_difficulty = null;
             task_date = null;
             task_time = null;
@@ -71,21 +74,30 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
             task_repeat_number = null;
             task_finish = null;
 
-            itemView.setOnClickListener(this);
+            itemView.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (listener != null && position != RecyclerView.NO_POSITION) {
+                    listener.onItemClick(tasks.get(position));
+                }
+            });
 
             itemView.setOnLongClickListener(view -> {
-                tasks.remove(getAdapterPosition());
-                notifyItemRemoved(getAdapterPosition());
-                Log.d(TAG, "delete long click" + getAdapterPosition());
-                // dodać do usunięcia z bazy
+                Toast.makeText(view.getContext(),"delete long click" + getAdapterPosition(), Toast.LENGTH_SHORT).show();
                 return true;
             });
         }
 
         @Override
-        public void onClick(View view) {
-            //Toast.makeText(view.getContext(), tasks.get(getAdapterPosition()), Toast.LENGTH_SHORT).show();
+        public void onClick(View v) {
+
         }
     }
 
+    public interface OnItemClickListener {
+        void onItemClick(Task task);
+    }
+
+    void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
 }

@@ -4,6 +4,12 @@ import androidx.room.TypeConverter;
 
 import java.util.Date;
 
+/*
+ * Created by AndroidStudio.
+ * User: piotrbec
+ * Date: 2020-01-26
+ */
+
 public class Converters {
     @TypeConverter
     public static Date fromTimestamp(Long value) {

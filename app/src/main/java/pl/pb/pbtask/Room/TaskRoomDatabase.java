@@ -1,6 +1,7 @@
 package pl.pb.pbtask.Room;
 
 import android.content.Context;
+import android.os.AsyncTask;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;
@@ -8,47 +9,51 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+/*
+ * Created by AndroidStudio.
+ * User: piotrbec
+ * Date: 2020-01-26
+ */
 
-@Database(entities = {Task.class}, version = 1, /*delete*/ exportSchema = false /*exportSchema*/)
+@Database(entities = {Task.class}, version = 1)
 public abstract class TaskRoomDatabase extends RoomDatabase {
     private static volatile TaskRoomDatabase INSTANCE;
 
+    private static RoomDatabase.Callback roomCallback = new RoomDatabase.Callback() {
+        @Override
+        public void onCreate(@NonNull SupportSQLiteDatabase db) {
+            super.onCreate(db);
+            new PopulateDbAsyncTask(INSTANCE).execute();
+        }
+    };
 
-    // delete
-    private static final int NUM_OF_THREADS = 4;
-    static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(NUM_OF_THREADS);
-    // delete
-
-    static TaskRoomDatabase getInstance(final Context context) {
+    static synchronized TaskRoomDatabase getInstance(Context context) {
         if (INSTANCE == null) {
-            synchronized (TaskRoomDatabase.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            TaskRoomDatabase.class, "task_database.db")/*.addCallback(sRoomDatabaseCallback)*/.build();
-                }
-            }
+            INSTANCE = Room.databaseBuilder(context.getApplicationContext(), TaskRoomDatabase.class,
+                    "task_database").fallbackToDestructiveMigration()
+                    .addCallback(roomCallback).build();
         }
         return INSTANCE;
     }
 
     public abstract TaskDao taskDao();
 
-//    private static RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback() {
-//        @Override
-//        public void onOpen(@NonNull SupportSQLiteDatabase db) {
-//            super.onOpen(db);
-//            databaseWriteExecutor.execute(() -> {
-//                TaskDao taskDao = INSTANCE.taskDao();
-//                taskDao.deleteTasks();
-//
-//                taskDao.insertTask(new Task("Test1", 1,"11.12.2019", "12:50", true, "minute", 1, true));
-//                taskDao.insertTask(new Task("Test2", 2,"12.12.2019", "13:50", false, "hour", 2, false));
-//                taskDao.insertTask(new Task("Test3", 3,"13.12.2019", "14:50", true, "day", 3, true));
-//            });
-//        }
-//    };
+    private static class PopulateDbAsyncTask extends AsyncTask<Void, Void, Void> {
+        private TaskDao taskDao;
 
+        private PopulateDbAsyncTask(TaskRoomDatabase database) {
+            taskDao = database.taskDao();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            taskDao.insertTask(new Task("Title 1", 3, "12.12.12",
+                    "11:40", false, "week", 1, false));
+            taskDao.insertTask(new Task("Title 2", 2, "12.12.12",
+                    "12:50", true, "hour", 2, true));
+            taskDao.insertTask(new Task("Title 3", 1, "12.12.12",
+                    "13:50", true, "day", 3, true));
+            return null;
+        }
+    }
 }
