@@ -1,18 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#534bae</color>
-    <color name="colorOnPrimary">#ffffff</color>
-    <color name="colorPrimaryDark">#1a237e</color>
-    <color name="colorPrimaryVariant">#000051</color>
+    <color name="firstcolor_50">#e8eaf6</color>
+    <color name="firstcolor_100">#c5cbe9</color>
+    <color name="firstcolor_200">#9fa8da</color>
+    <color name="firstcolor_300">#7985cb</color>
+    <color name="firstcolor_400">#5c6bc0</color>
+    <color name="firstcolor_500">#3f51b5</color>
+    <color name="firstcolor_600">#394aae</color>
+    <color name="firstcolor_700">#3140a5</color>
+    <color name="firstcolor_800">#29379d</color>
+    <color name="firstcolor_900">#1b278d</color>
+    <color name="firstcolor_A100">#c6cbff</color>
+    <color name="firstcolor_A200">#939dff</color>
+    <color name="firstcolor_A400">#606eff</color>
+    <color name="firstcolor_A700">#4757ff</color>
+    <color name="secondcolor_50">#ffffff</color>
+    <color name="secondcolor_100">#d3cbe7</color>
+    <color name="secondcolor_200">#b2a5d5</color>
+    <color name="secondcolor_300">#8974be</color>
+    <color name="secondcolor_400">#775fb4</color>
+    <color name="secondcolor_500">#674ea7</color>
+    <color name="secondcolor_600">#5a4492</color>
+    <color name="secondcolor_700">#4d3b7d</color>
+    <color name="secondcolor_800">#403168</color>
+    <color name="secondcolor_900">#342754</color>
+    <color name="secondcolor_A100">#f9f7fd</color>
+    <color name="secondcolor_A200">#b7a2ec</color>
+    <color name="secondcolor_A400">#7c5dcb</color>
+    <color name="secondcolor_A700">#7256b9</color>
 
-    <color name="colorSecondary">#7c43bd</color>
-    <color name="colorOnSecondary">#ffffff</color>
-    <color name="colorSecondaryVariant">#534bae</color>
+    <color name="colorPrimary">#3f51b5</color>
+    <color name="colorOnPrimary">#c6cbff</color>
+    <color name="colorPrimaryDark">#1b278d</color>
+    <color name="colorPrimaryVariant">#606eff</color>
 
-    <color name="colorSurface">#1a237e</color>
-    <color name="colorOnSurface">#ffffff</color>
-    <color name="colorPrimarySurface">#534bae</color>
-    <color name="colorOnPrimarySurface">#ffffff</color>
+    <color name="colorSecondary">#7256b9</color>
+    <color name="colorOnSecondary">#f9f7fd</color>
+    <color name="colorSecondaryVariant">#674ea7</color>
+
+    <color name="colorSurface">#29379d</color>
+    <color name="colorOnSurface">#c6cbff</color>
+    <color name="colorPrimarySurface">#775fb4</color>
+    <color name="colorOnPrimarySurface">#f9f7fd</color>
 
     <color name="colorBackground">#ffffff</color>
     <color name="colorOnBackground">#000000</color>

@@ -10,9 +10,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".AddTaskActivity" />
-        <activity android:name=".DashboardActivity" />
+        tools:ignore="GoogleAppIndexingWarning"
+        android:fullBackupContent="">
         <activity android:name=".LoadingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,6 +19,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".DashboardActivity"
+            android:launchMode="singleTop" />
+        <activity android:name=".AddEditTaskActivity"
+            android:parentActivityName=".DashboardActivity"/>
     </application>
 
 </manifest>
