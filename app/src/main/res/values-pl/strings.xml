@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="action_about">O nas</string>
+    <string name="action_dark">Ciemny</string>
+    <string name="action_empty">Pusto</string>
+    <string name="active">Aktywny</string>
+    <string name="author">autor</string>
+    <string name="date">Data</string>
+    <string name="day">Dzień</string>
+    <string name="difficulty">Trudność</string>
+    <string name="easy">Łatwy</string>
+    <string name="hard">Trudny</string>
+    <string name="hour">Godzina</string>
+    <string name="middle">Średni</string>
+    <string name="minute">Minuta</string>
+    <string name="number">Numer</string>
+    <string name="off">Wył.</string>
+    <string name="on">Wł.</string>
+    <string name="repeat">Powtórz</string>
+    <string name="repeat_type">Typ powtórzenia</string>
+    <string name="save">Zapisz</string>
+    <string name="time">Czas</string>
+    <string name="title">Tytuł</string>
+    <string name="version">wersja</string>
+    <string name="week">Tydzień</string>
+    <string name="email">poczta</string>
+    <string name="complete">Proszę uzupełnić</string>
+    <string name="added">dodano</string>
+    <string name="error">błąd</string>
+    <string name="not_saved">nie zapisano</string>
+    <string name="updated">zaktualizowano</string>
+    <string name="description">Powiadomienie - PBTask</string>
+</resources>

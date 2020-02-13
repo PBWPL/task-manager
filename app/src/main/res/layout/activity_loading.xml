@@ -56,7 +56,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/app_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -69,14 +69,14 @@
     </LinearLayout>
 
 
-    <TextView
-        android:id="@+id/app_autor"
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/app_author"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="25dp"
-        android:text="@string/app_autor"
+        android:text="@string/app_author"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="50sp"
         app:fontFamily="cursive" />

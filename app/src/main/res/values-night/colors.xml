@@ -2,11 +2,8 @@
 <resources>
     <color name="colorSecondary">#4a148c</color>
     <color name="colorSecondaryVariant">#12005e</color>
-
     <color name="colorBackground">#121212</color>
     <color name="colorOnBackground">#ffffff</color>
-
     <color name="colorOnError">#121212</color>
-
     <color name="colorPrimarySurface">#1a237e</color>
 </resources>

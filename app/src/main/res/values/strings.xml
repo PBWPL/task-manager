@@ -1,12 +1,15 @@
 <resources>
-    <string name="app_name">PB Task</string>
-    <string name="app_autor">Piotr B.</string>
-
+    <string name="app_name" translatable="false">PB Task</string>
+    <string name="app_author" translatable="false">Piotr Bec</string>
+    <string name="app_version" translatable="false">v1.0</string>
+    <string name="app_email" translatable="false">becpiotr@gmail.com</string>
+    <string name="app_copyright" translatable="false">Copyright © 2019 – 2020 by PB</string>
+    <string name="description">Notification - PBTask</string>
+    <string name="version">version</string>
+    <string name="email">email</string>
     <string name="action_dark">Dark</string>
-    <string name="action_grid">Grid</string>
-
-    <string name="action_another">Another</string>
-    <string name="action_about">About</string>
+    <string name="action_empty">Empty</string>
+    <string name="action_about">About us</string>
     <string name="title">Title</string>
     <string name="save">Save</string>
     <string name="easy">Easy</string>
@@ -23,5 +26,13 @@
     <string name="week">Week</string>
     <string name="repeat_type">Repeat type</string>
     <string name="number">Number</string>
-    <string name="finish">Finish</string>
+    <string name="active">Active</string>
+    <string name="minute">Minute</string>
+    <string name="thumbnail" translatable="false">thumbnail</string>
+    <string name="author">author</string>
+    <string name="complete">Please complete</string>
+    <string name="not_saved">not saved</string>
+    <string name="updated">updated</string>
+    <string name="error">error</string>
+    <string name="added">added</string>
 </resources>

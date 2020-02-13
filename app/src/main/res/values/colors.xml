@@ -28,29 +28,23 @@
     <color name="secondcolor_A200">#b7a2ec</color>
     <color name="secondcolor_A400">#7c5dcb</color>
     <color name="secondcolor_A700">#7256b9</color>
-
     <color name="colorPrimary">#3f51b5</color>
     <color name="colorOnPrimary">#c6cbff</color>
     <color name="colorPrimaryDark">#1b278d</color>
     <color name="colorPrimaryVariant">#606eff</color>
-
     <color name="colorSecondary">#7256b9</color>
     <color name="colorOnSecondary">#f9f7fd</color>
     <color name="colorSecondaryVariant">#674ea7</color>
-
     <color name="colorSurface">#29379d</color>
     <color name="colorOnSurface">#c6cbff</color>
     <color name="colorPrimarySurface">#775fb4</color>
     <color name="colorOnPrimarySurface">#f9f7fd</color>
-
     <color name="colorBackground">#ffffff</color>
     <color name="colorOnBackground">#000000</color>
-
     <color name="colorAccent">#b00020</color>
-
     <color name="colorError">#b00020</color>
     <color name="colorOnError">#ffffff</color>
-
     <color name="textColor">#ffffff</color>
     <color name="textColorPrimary">#ffffff</color>
+    <color name="red">#b10000</color>
 </resources>
