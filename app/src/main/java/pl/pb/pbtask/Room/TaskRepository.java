@@ -43,8 +43,8 @@ class TaskRepository {
         return tasks;
     }
 
-    LiveData<List<Task>> getAllTasksByDifficultyWithoutFinishTasks() {
-        return taskDao.getAllTasksByDifficultyWithoutFinishTasks();
+    LiveData<List<Task>> getAllTasksByDifficultyWithoutActiveTasks() {
+        return taskDao.getAllTasksByDifficultyWithoutActiveTasks();
     }
 
     LiveData<List<Task>> findTaskByTitle(String title_like) {

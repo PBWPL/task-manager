@@ -11,7 +11,7 @@ import java.util.List;
 /*
  * Created by AndroidStudio.
  * User: piotrbec
- * Date: 2020-01-26
+ * Date: 2020-01-27
  */
 
 public class TaskViewModel extends AndroidViewModel {
@@ -44,12 +44,11 @@ public class TaskViewModel extends AndroidViewModel {
         return tasks;
     }
 
-    public LiveData<List<Task>> getAllTasksByDifficultyWithoutFinishTasks() {
-        return repository.getAllTasksByDifficultyWithoutFinishTasks();
+    public LiveData<List<Task>> getAllTasksByDifficultyWithoutActiveTasks() {
+        return repository.getAllTasksByDifficultyWithoutActiveTasks();
     }
 
     public LiveData<List<Task>> findTaskByTitle(String title_like) {
         return repository.findTaskByTitle(title_like);
     }
-
 }

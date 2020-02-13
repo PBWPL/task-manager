@@ -10,8 +10,14 @@ import androidx.fragment.app.DialogFragment;
 
 import java.util.Calendar;
 
+/*
+ * Created by AndroidStudio.
+ * User: piotrbec
+ * Date: 2020-02-05
+ */
+
 public class TimePickerFragment extends DialogFragment {
-    private static final String TAG = "TimePickerFragment";
+    private static final String DEBUG_TAG = "TimePickerFragment";
 
     @NonNull
     @Override

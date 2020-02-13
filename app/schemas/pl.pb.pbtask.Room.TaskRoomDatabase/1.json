@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "9d7edeefedfa5d793ad941dc49acea64",
+    "identityHash": "cc4288c2b8483bf70ad68ee95e769c82",
     "entities": [
       {
         "tableName": "task_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`task_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `task_title` TEXT, `task_difficulty` INTEGER NOT NULL, `task_date` TEXT, `task_time` TEXT, `task_repeat` INTEGER NOT NULL, `task_repeat_type` TEXT, `task_repeat_number` INTEGER NOT NULL, `task_finish` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`task_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `task_title` TEXT, `task_difficulty` TEXT, `task_date` TEXT, `task_time` TEXT, `task_repeat` INTEGER NOT NULL, `task_repeat_type` TEXT, `task_repeat_number` INTEGER NOT NULL, `task_active` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -23,8 +23,8 @@
           {
             "fieldPath": "difficulty",
             "columnName": "task_difficulty",
-            "affinity": "INTEGER",
-            "notNull": true
+            "affinity": "TEXT",
+            "notNull": false
           },
           {
             "fieldPath": "date",
@@ -57,8 +57,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "finish",
-            "columnName": "task_finish",
+            "fieldPath": "active",
+            "columnName": "task_active",
             "affinity": "INTEGER",
             "notNull": true
           }
@@ -76,7 +76,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '9d7edeefedfa5d793ad941dc49acea64')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'cc4288c2b8483bf70ad68ee95e769c82')"
     ]
   }
 }

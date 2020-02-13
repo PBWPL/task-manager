@@ -14,11 +14,11 @@ import java.util.Objects;
 /*
  * Created by AndroidStudio.
  * User: piotrbec
- * Date: 2020-01-25
+ * Date: 2020-02-05
  */
 
 public class DatePickerFragment extends DialogFragment {
-    private static final String TAG = "DatePickerFragment";
+    private static final String DEBUG_TAG = "DatePickerFragment";
 
     @NonNull
     @Override
@@ -26,7 +26,7 @@ public class DatePickerFragment extends DialogFragment {
         Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);
-        int day = c.get(Calendar.DAY_OF_MONTH);
+        int day = c.get(Calendar.DATE);
         return new DatePickerDialog(Objects.requireNonNull(getActivity()), (DatePickerDialog.OnDateSetListener) getActivity(), year, month, day);
     }
 }

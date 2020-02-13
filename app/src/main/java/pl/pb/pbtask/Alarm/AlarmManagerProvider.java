@@ -1,30 +1,23 @@
-package pl.pb.todohelper.alarm;
-
-/*
- * Created by AndroidStudio.
- * User: piotrbec
- * Date: 2020-01-12
- */
+package pl.pb.pbtask.Alarm;
 
 import android.app.AlarmManager;
 import android.content.Context;
 
-public class AlarmManagerProvider {
-    private static final String TAG = AlarmManagerProvider.class.getSimpleName();
-    private static AlarmManager sAlarmManager;
+/*
+ * Created by AndroidStudio.
+ * User: piotrbec
+ * Date: 2020-02-06
+ */
 
-    public static synchronized void injectAlarmManager(AlarmManager alarmManager) {
-        if (sAlarmManager != null) {
-            throw new IllegalStateException("Alarm Manager Already Set");
-        }
-        sAlarmManager = alarmManager;
-    }
+class AlarmManagerProvider {
+    private static final String DEBUG_TAG = "AlarmManagerProvider";
 
-    /*package*/
+    private static AlarmManager alarmManager;
+
     static synchronized AlarmManager getAlarmManager(Context context) {
-        if (sAlarmManager == null) {
-            sAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        if (alarmManager == null) {
+            alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         }
-        return sAlarmManager;
+        return alarmManager;
     }
 }

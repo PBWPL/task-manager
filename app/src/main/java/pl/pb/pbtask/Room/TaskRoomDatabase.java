@@ -12,10 +12,10 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 /*
  * Created by AndroidStudio.
  * User: piotrbec
- * Date: 2020-01-26
+ * Date: 2020-01-27
  */
 
-@Database(entities = {Task.class}, version = 1)
+@Database(entities = {Task.class}, version = 2) // VERSION DB 2
 public abstract class TaskRoomDatabase extends RoomDatabase {
     private static volatile TaskRoomDatabase INSTANCE;
 
@@ -31,7 +31,7 @@ public abstract class TaskRoomDatabase extends RoomDatabase {
         if (INSTANCE == null) {
             INSTANCE = Room.databaseBuilder(context.getApplicationContext(), TaskRoomDatabase.class,
                     "task_database").fallbackToDestructiveMigration()
-                    .addCallback(roomCallback).build();
+                    /*.addCallback(roomCallback)*/.build(); // INSERT DEFAULT ROWS TO DB
         }
         return INSTANCE;
     }
@@ -47,11 +47,11 @@ public abstract class TaskRoomDatabase extends RoomDatabase {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            taskDao.insertTask(new Task("Title 1", 3, "12.12.12",
+            taskDao.insertTask(new Task("Title 1", "easy", "12.12.12",
                     "11:40", false, "week", 1, false));
-            taskDao.insertTask(new Task("Title 2", 2, "12.12.12",
+            taskDao.insertTask(new Task("Title 2", "hard", "12.12.12",
                     "12:50", true, "hour", 2, true));
-            taskDao.insertTask(new Task("Title 3", 1, "12.12.12",
+            taskDao.insertTask(new Task("Title 3", "middle", "12.12.12",
                     "13:50", true, "day", 3, true));
             return null;
         }

@@ -32,8 +32,8 @@ public interface TaskDao {
     @Query("SELECT * FROM task_table ORDER BY task_difficulty ASC")
     LiveData<List<Task>> getAllTasksByDifficulty();
 
-    @Query("SELECT * FROM task_table WHERE task_finish=0 ORDER BY task_difficulty ASC")
-    LiveData<List<Task>> getAllTasksByDifficultyWithoutFinishTasks();
+    @Query("SELECT * FROM task_table WHERE task_active=0 ORDER BY task_difficulty ASC")
+    LiveData<List<Task>> getAllTasksByDifficultyWithoutActiveTasks();
 
     @Query("SELECT * FROM task_table WHERE task_title LIKE (:title_like)")
     LiveData<List<Task>> findTaskByTitle(String title_like);

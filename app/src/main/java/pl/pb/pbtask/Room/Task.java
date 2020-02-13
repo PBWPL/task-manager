@@ -21,7 +21,7 @@ public class Task {
     private String title;
 
     @ColumnInfo(name = "task_difficulty")
-    private int difficulty;
+    private String difficulty;
 
     @ColumnInfo(name = "task_date")
     private String date;
@@ -38,11 +38,11 @@ public class Task {
     @ColumnInfo(name = "task_repeat_number")
     private int repeat_number;
 
-    @ColumnInfo(name = "task_finish")
-    private boolean finish;
+    @ColumnInfo(name = "task_active")
+    private boolean active;
 
-    public Task(String title, int difficulty, String date, String time, boolean repeat,
-                String repeat_type, int repeat_number, boolean finish) {
+    public Task(String title, String difficulty, String date, String time, boolean repeat,
+                String repeat_type, int repeat_number, boolean active) {
         this.title = title;
         this.difficulty = difficulty;
         this.date = date;
@@ -50,7 +50,7 @@ public class Task {
         this.repeat = repeat;
         this.repeat_type = repeat_type;
         this.repeat_number = repeat_number;
-        this.finish = finish;
+        this.active = active;
     }
 
     @NonNull
@@ -59,7 +59,7 @@ public class Task {
         return "\nTask{" + "id='" + id + "', title='" + title + "', difficulty=" + difficulty
                 + "', date=" + date + "', time=" + time + "', repeat=" + repeat
                 + "', repeat_type=" + repeat_type + "', repeat_number=" + repeat_number
-                + "', finish=" + finish + '}';
+                + "', active=" + active + '}';
     }
 
     public int getId() {
@@ -78,11 +78,11 @@ public class Task {
         this.title = title;
     }
 
-    public int getDifficulty() {
+    public String getDifficulty() {
         return difficulty;
     }
 
-    public void setDifficulty(int difficulty) {
+    public void setDifficulty(String difficulty) {
         this.difficulty = difficulty;
     }
 
@@ -126,11 +126,11 @@ public class Task {
         this.repeat_number = repeat_number;
     }
 
-    public boolean isFinish() {
-        return finish;
+    public boolean isActive() {
+        return active;
     }
 
-    public void setFinish(boolean finish) {
-        this.finish = finish;
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }
